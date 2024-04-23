@@ -1,22 +1,18 @@
-name: Combine PRs
-
-on:
-  schedule:
-    - cron: '0 2 * * *' # Every day at 02:00 UTC
-  workflow_dispatch: # allows you to manually trigger the workflow
-
-# The minimum permissions required to run this Action
-permissions:
-  contents: write
-  pull-requests: write
-  checks: read
-
 jobs:
   combine-prs:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: combine-prs
-        id: combine-prs
-        uses: github/combine-prs@v5.0.0
-        with:
-          branch_regex: ^(dependa|wrapper)bot\/.*$
+    - continue-on-error: true
+      id: combine-prs
+      name: combine-prs
+      uses: github/combine-prs@v5.0.0
+      with:
+        branch_regex: ^(dependa|wrapper)bot\/.*$
+name: Combine PRs
+on:
+  repository_dispatch:
+    types: trigger-ga___combine-prs.yml
+permissions:
+  checks: read
+  contents: write
+  pull-requests: write
